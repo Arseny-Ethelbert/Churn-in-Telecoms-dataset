@@ -1,0 +1,9 @@
+flask
+gunicorn
+pickle-mixin
+scikit-learn
+pandas
+numpy
+Jinja2
+Click
+python-git

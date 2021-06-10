@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Churn in Telecom's dataset</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
+</head>
+
+<body>
+
+<div class="intro">
+<p style="font-size:185%">Churn in Telecom's dataset<br>with Random forest and SVM</p>
+<p style="font-size:185%">Уйдет ли клиент к<br>другому оператору связи?</p>
+<p style="font-size:155%">Точность предсказания: 92%</p>
+</div>
+
+<div class="layer">
+    <form action="{{ url_for('main') }}" method="POST">
+        <fieldset>
+            <legend><p style="font-size:135%">Данные клиента:</p></legend>
+            State:
+            <select name="state" id="state" required>
+                <option value="KS">KS</option>
+                <option value="OH">OH</option>
+                <option value="NJ">NJ</option>
+                <option value="OK">OK</option>
+                <option value="AL">AL</option>
+                <option value="MA">MA</option>
+                <option value="MO">MO</option>
+                <option value="LA">LA</option>
+                <option value="WV">WV</option>
+                <option value="IN">IN</option>
+                <option value="RI">RI</option>
+                <option value="IA">IA</option>
+                <option value="MT">MT</option>
+                <option value="NY">NY</option>
+                <option value="ID">ID</option>
+                <option value="VT">VT</option>
+                <option value="VA">VA</option>
+                <option value="TX">TX</option>
+                <option value="FL">FL</option>
+                <option value="CO">CO</option>
+                <option value="AZ">AZ</option>
+                <option value="SC">SC</option>
+                <option value="NE">NE</option>
+                <option value="WY">WY</option>
+                <option value="HI">HI</option>
+                <option value="IL">IL</option>
+                <option value="NH">NH</option>
+                <option value="GA">GA</option>
+                <option value="AK">AK</option>
+                <option value="MD">MD</option>
+                <option value="AR">AR</option>
+                <option value="WI">WI</option>
+                <option value="OR">OR</option>
+                <option value="MI">MI</option>
+                <option value="DE">DE</option>
+                <option value="UT">UT</option>
+                <option value="CA">CA</option>
+                <option value="MN">MN</option>
+                <option value="SD">SD</option>
+                <option value="NC">NC</option>
+                <option value="WA">WA</option>
+                <option value="NM">NM</option>
+                <option value="NV">NV</option>
+                <option value="DC">DC</option>
+                <option value="KY">KY</option>
+                <option value="ME">ME</option>
+                <option value="MS">MS</option>
+                <option value="TN">TN</option>
+                <option value="PA">PA</option>
+                <option value="CT">CT</option>
+                <option value="ND">ND</option>
+            </select>
+            <br>
+            Account length:
+            <input name="account_length" id="account_length" type="number" required>
+            (1--243)
+            <br>
+            International plan:
+            <select name="international_plan" id="international_plan" required>
+                <option value=1>Yes</option>
+                <option value=0>No</option> 
+            </select>        
+            <br>
+            Voice mail plan:
+            <select name="voice_mail_plan" id="voice_mail_plan" required>
+                <option value=1>Yes</option>
+                <option value=0>No</option> 
+            </select>            
+            <br>
+            Number vmail messages:
+            <input name="number_vmail_messages" id="number_vmail_messages" type="number" required>
+            (0--51)
+            <br>
+            Total day minutes:
+            <input name="total_day_minutes" id="total_day_minutes" type="number" step="0.1" required>
+            (0--350.8)
+            <br>
+            Total day calls:
+            <input name="total_day_calls" id="total_day_calls" type="number" required>
+            (0--165)
+            <br>
+            Total day charge:
+            <input name="total_day_charge" id="total_day_charge" type="number" step="0.01" required>
+            (0--59.64)
+            <br>
+            Total eve minutes:
+            <input name="total_eve_minutes" id="total_eve_minutes" type="number" step="0.1" required>
+            (0--363.7)
+            <br>
+            Total eve calls:
+            <input name="total_eve_calls" id="total_eve_calls" type="number" required>
+            (0--170)
+            <br>
+            Total eve charge:
+            <input name="total_eve_charge" id="total_eve_charge" type="number" step="0.01" required>
+            (0--30.91)
+            <br>
+            Total night minutes:
+            <input name="total_night_minutes" id="total_night_minutes" type="number" step="0.1" required>
+            (23.2--395)
+            <br>
+            Total night calls:
+            <input name="total_night_calls" id="total_night_calls" type="number" required>
+            (33--175)
+            <br>
+            Total night charge:
+            <input name="total_night_charge" id="total_night_charge" type="number" step="0.01" required>
+            (1.04--17.77)
+            <br>
+            Total intl minutes:
+            <input name="total_intl_minutes" id="total_intl_minutes" type="number" step="0.1" required>
+            (0--20)
+            <br>
+            Total intl calls:
+            <input name="total_intl_calls" id="total_intl_calls" type="number" required>
+            (0--20)
+            <br>
+            Total intl charge:
+            <input name="total_intl_charge" id="total_intl_charge" type="number" step="0.01" required>
+            (0--5.4)
+            <br>
+            Customer service calls:
+            <input name="customer_service_calls" id="customer_service_calls" type="number" required>
+            (0--9)
+            <br> <br>
+            <button type="button" onclick="getRandomValues()">Задать случайные значения</button>
+            <br> <br>
+            <button>
+            <input type="submit" name="send" id="send" value="Предсказать"> 
+            </button>        
+        </fieldset>
+    </form>
+</div>
+
+<div class="result" align="center">
+    {% if result %}
+        <p style="font-size:195%">Результат:</p>
+        <p style="font-size:195%">{{ result }}</p>
+    {% endif %}
+</div>
+
+<script>
+function chooseState() {
+    var select = document.getElementById('state');
+    var items = select.getElementsByTagName('option');
+    var index = Math.floor(Math.random() * items.length);
+    select.selectedIndex = index;
+ }
+
+function getRandomValues() {
+    chooseState();
+    document.getElementById('account_length').value = (Math.random() * (243)).toFixed();
+    document.getElementById('international_plan').value = (Math.random() * (1)).toFixed();
+    document.getElementById('voice_mail_plan').value = (Math.random() * (1)).toFixed();
+    document.getElementById('number_vmail_messages').value = (Math.random() * (51)).toFixed();
+    document.getElementById('total_day_minutes').value = (Math.random() * (350.8)).toFixed(1);
+    document.getElementById('total_day_calls').value = (Math.random() * (165)).toFixed();
+    document.getElementById('total_day_charge').value = (Math.random() * (59.64)).toFixed(2);
+    document.getElementById('total_eve_minutes').value = (Math.random() * (363.7)).toFixed(1);
+    document.getElementById('total_eve_calls').value = (Math.random() * (170)).toFixed();
+    document.getElementById('total_eve_charge').value = (Math.random() * (30.91)).toFixed(2);
+    document.getElementById('total_night_minutes').value = (Math.random() * (395)).toFixed(1);
+    document.getElementById('total_night_calls').value = (Math.random() * (175)).toFixed();
+    document.getElementById('total_night_charge').value = (Math.random() * (17.77)).toFixed(2);
+    document.getElementById('total_intl_minutes').value = (Math.random() * (20)).toFixed(1);
+    document.getElementById('total_intl_calls').value = (Math.random() * (20)).toFixed();
+    document.getElementById('total_intl_charge').value = (Math.random() * (5.4)).toFixed(2);
+    document.getElementById('customer_service_calls').value = (Math.random() * (9)).toFixed();
+    }
+</script>
+
+
+</body>
+</html>
