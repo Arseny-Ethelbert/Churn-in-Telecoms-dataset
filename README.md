@@ -1,2 +1,2 @@
-# Churn-in-Telecom-s-dataset
+# Churn-in-Telecoms-dataset
 Prediction on popular kaggle`s dataset
